@@ -46,6 +46,7 @@ export default function Feed() {
   const [selectedPuzzle, setSelectedPuzzle] = useState<Post | null>(null);
   const [puzzleAnswer, setPuzzleAnswer] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [activePuzzle, setActivePuzzle] = useState<Post | null>(null);
 
   useEffect(() => {
     loadPosts();
@@ -62,13 +63,20 @@ export default function Feed() {
 
       if (response.ok) {
         const data = await response.json();
-        setPosts(data);
         
-        // Load puzzle statuses
-        for (const post of data) {
-          if (post.is_puzzle) {
-            loadPuzzleStatus(post.post_id);
-          }
+        // Filter out puzzles - we'll show only the latest one separately
+        const regularPosts = data.filter((p: Post) => !p.is_puzzle);
+        const puzzles = data.filter((p: Post) => p.is_puzzle);
+        
+        // Get the most recent puzzle
+        const latestPuzzle = puzzles.length > 0 ? puzzles[0] : null;
+        
+        setPosts(regularPosts);
+        setActivePuzzle(latestPuzzle);
+        
+        // Load puzzle status if there's an active puzzle
+        if (latestPuzzle) {
+          loadPuzzleStatus(latestPuzzle.post_id);
         }
       }
     } catch (error) {
@@ -135,59 +143,82 @@ export default function Feed() {
     }
   };
 
-  const renderPost = ({ item }: { item: Post }) => {
-    const puzzleStatus = item.is_puzzle ? puzzleStatuses[item.post_id] : null;
+  const renderPost = ({ item }: { item: Post }) => (
+    <View style={styles.postCard}>
+      <Text style={styles.postTitle}>{item.title}</Text>
+      <Text style={styles.postContent}>{item.content}</Text>
+      
+      {item.image && (
+        <Image
+          source={{ uri: item.image }}
+          style={styles.postImage}
+          resizeMode="contain"
+        />
+      )}
+
+      <Text style={styles.postDate}>
+        {new Date(item.created_at).toLocaleDateString()}
+      </Text>
+    </View>
+  );
+
+  const renderDailyPuzzle = () => {
+    if (!activePuzzle) return null;
+    
+    const puzzleStatus = puzzleStatuses[activePuzzle.post_id];
 
     return (
-      <View style={styles.postCard}>
-        <Text style={styles.postTitle}>{item.title}</Text>
-        <Text style={styles.postContent}>{item.content}</Text>
+      <View style={styles.dailyPuzzleCard}>
+        <View style={styles.dailyPuzzleHeader}>
+          <Ionicons name="trophy" size={32} color="#FFD700" />
+          <Text style={styles.dailyPuzzleTitle}>Daily Chess Puzzle</Text>
+        </View>
         
-        {item.image && (
+        <Text style={styles.puzzleTitle}>{activePuzzle.title}</Text>
+        <Text style={styles.puzzleContent}>{activePuzzle.content}</Text>
+        
+        {activePuzzle.image && (
           <Image
-            source={{ uri: item.image }}
-            style={styles.postImage}
+            source={{ uri: activePuzzle.image }}
+            style={styles.puzzleImage}
             resizeMode="contain"
           />
         )}
 
-        {item.is_puzzle && (
-          <View style={styles.puzzleSection}>
-            <View style={styles.puzzleHeader}>
-              <Ionicons name="extension-puzzle" size={24} color="#8B4513" />
-              <Text style={styles.puzzleLabel}>Chess Puzzle</Text>
-            </View>
-            
-            {puzzleStatus && (
-              <View style={styles.puzzleStatus}>
-                {puzzleStatus.has_solved ? (
-                  <Text style={styles.solvedText}>✓ Solved!</Text>
-                ) : (
-                  <Text style={styles.attemptsText}>
-                    Attempts: {puzzleStatus.attempts_used}/2
-                  </Text>
-                )}
+        {puzzleStatus && (
+          <View style={styles.puzzleStatus}>
+            {puzzleStatus.has_solved ? (
+              <View style={styles.solvedBadge}>
+                <Ionicons name="checkmark-circle" size={24} color="#228B22" />
+                <Text style={styles.solvedText}>Solved!</Text>
               </View>
-            )}
-
-            {puzzleStatus && !puzzleStatus.has_solved && puzzleStatus.attempts_remaining > 0 && (
-              <TouchableOpacity
-                style={styles.solveButton}
-                onPress={() => setSelectedPuzzle(item)}
-              >
-                <Text style={styles.solveButtonText}>Solve Puzzle</Text>
-              </TouchableOpacity>
-            )}
-            
-            {puzzleStatus && puzzleStatus.attempts_remaining === 0 && !puzzleStatus.has_solved && (
-              <Text style={styles.noAttemptsText}>No attempts remaining</Text>
+            ) : (
+              <View style={styles.attemptsBadge}>
+                <Ionicons name="sync" size={20} color="#666" />
+                <Text style={styles.attemptsText}>
+                  Attempts: {puzzleStatus.attempts_used}/2
+                </Text>
+              </View>
             )}
           </View>
         )}
 
-        <Text style={styles.postDate}>
-          {new Date(item.created_at).toLocaleDateString()}
-        </Text>
+        {puzzleStatus && !puzzleStatus.has_solved && puzzleStatus.attempts_remaining > 0 && (
+          <TouchableOpacity
+            style={styles.solvePuzzleButton}
+            onPress={() => setSelectedPuzzle(activePuzzle)}
+          >
+            <Ionicons name="play" size={20} color="#fff" />
+            <Text style={styles.solvePuzzleButtonText}>Solve Puzzle</Text>
+          </TouchableOpacity>
+        )}
+        
+        {puzzleStatus && puzzleStatus.attempts_remaining === 0 && !puzzleStatus.has_solved && (
+          <View style={styles.noAttemptsContainer}>
+            <Ionicons name="close-circle" size={20} color="#DC143C" />
+            <Text style={styles.noAttemptsText}>No attempts remaining</Text>
+          </View>
+        )}
       </View>
     );
   };
@@ -217,11 +248,14 @@ export default function Feed() {
         renderItem={renderPost}
         keyExtractor={(item) => item.post_id}
         contentContainerStyle={styles.listContent}
+        ListHeaderComponent={renderDailyPuzzle()}
         ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Ionicons name="document-text-outline" size={64} color="#CCC" />
-            <Text style={styles.emptyText}>No posts yet</Text>
-          </View>
+          activePuzzle ? null : (
+            <View style={styles.emptyContainer}>
+              <Ionicons name="document-text-outline" size={64} color="#CCC" />
+              <Text style={styles.emptyText}>No posts yet</Text>
+            </View>
+          )
         }
       />
 
@@ -302,6 +336,107 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 8,
   },
+  dailyPuzzleCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 24,
+    elevation: 4,
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  dailyPuzzleHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    justifyContent: 'center',
+  },
+  dailyPuzzleTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#8B4513',
+    marginLeft: 12,
+  },
+  puzzleTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  puzzleContent: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 12,
+    lineHeight: 24,
+  },
+  puzzleImage: {
+    width: '100%',
+    height: 250,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  puzzleStatus: {
+    marginBottom: 12,
+  },
+  solvedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E8F5E9',
+    padding: 12,
+    borderRadius: 8,
+  },
+  solvedText: {
+    fontSize: 16,
+    color: '#228B22',
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
+  attemptsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F5F5DC',
+    padding: 8,
+    borderRadius: 8,
+  },
+  attemptsText: {
+    fontSize: 14,
+    color: '#666',
+    marginLeft: 8,
+  },
+  solvePuzzleButton: {
+    flexDirection: 'row',
+    backgroundColor: '#8B4513',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  solvePuzzleButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  noAttemptsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFEBEE',
+    padding: 12,
+    borderRadius: 8,
+  },
+  noAttemptsText: {
+    fontSize: 14,
+    color: '#DC143C',
+    fontStyle: 'italic',
+    marginLeft: 8,
+  },
   postCard: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -330,50 +465,6 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 8,
     marginBottom: 12,
-  },
-  puzzleSection: {
-    backgroundColor: '#F5F5DC',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 8,
-  },
-  puzzleHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  puzzleLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#8B4513',
-    marginLeft: 8,
-  },
-  puzzleStatus: {
-    marginBottom: 8,
-  },
-  solvedText: {
-    fontSize: 14,
-    color: '#228B22',
-    fontWeight: '600',
-  },
-  attemptsText: {
-    fontSize: 14,
-    color: '#666',
-  },
-  solveButton: {
-    backgroundColor: '#8B4513',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  solveButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-  noAttemptsText: {
-    fontSize: 14,
-    color: '#999',
-    fontStyle: 'italic',
   },
   postDate: {
     fontSize: 12,
