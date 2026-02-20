@@ -318,6 +318,31 @@ async def create_post(
     )
     
     await db.posts.insert_one(new_post.dict())
+    
+    # Send push notifications if it's a puzzle
+    if new_post.is_puzzle:
+        try:
+            # Get all active members with push tokens
+            members = await db.users.find({
+                "subscription_status": "active",
+                "role": "member",
+                "push_token": {"$exists": True, "$ne": None}
+            }).to_list(1000)
+            
+            tokens = [m["push_token"] for m in members if m.get("push_token")]
+            
+            if tokens:
+                await send_push_notification(
+                    tokens=tokens,
+                    title="🧩 New Daily Puzzle!",
+                    body=post_data.title,
+                    data={"type": "puzzle", "post_id": new_post.post_id}
+                )
+                logger.info(f"Sent puzzle notification to {len(tokens)} members")
+        except Exception as e:
+            logger.error(f"Failed to send notifications: {e}")
+            # Don't fail the post creation if notification fails
+    
     return new_post
 
 @api_router.delete("/posts/{post_id}")
