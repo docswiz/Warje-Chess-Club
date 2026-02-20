@@ -13,8 +13,11 @@ export default function Index() {
   const [clubInfo, setClubInfo] = React.useState<any>(null);
 
   useEffect(() => {
-    if (!isLoading && user) {
-      router.replace('/(tabs)/feed');
+    if (!isLoading) {
+      if (user) {
+        // User is logged in, redirect to feed
+        router.replace('/(tabs)/feed');
+      }
     }
   }, [user, isLoading]);
 
