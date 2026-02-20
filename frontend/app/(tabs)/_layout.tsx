@@ -6,19 +6,32 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#8B4513',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: '#1877F2',
+        tabBarInactiveTintColor: '#65676B',
         tabBarStyle: {
-          backgroundColor: '#FFF8DC',
+          backgroundColor: '#fff',
           borderTopWidth: 1,
-          borderTopColor: '#DDD',
+          borderTopColor: '#E4E6EB',
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
         },
         headerStyle: {
-          backgroundColor: '#8B4513',
+          backgroundColor: '#fff',
+          elevation: 2,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.1,
+          shadowRadius: 3,
         },
-        headerTintColor: '#fff',
+        headerTintColor: '#1C1E21',
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: '700',
+          fontSize: 20,
         },
       }}
     >
@@ -53,7 +66,7 @@ export default function TabLayout() {
         name="admin"
         options={{
           title: 'Admin',
-          href: null, // Hidden from tabs, accessible via navigation
+          href: null,
         }}
       />
     </Tabs>
