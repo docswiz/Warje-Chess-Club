@@ -15,7 +15,7 @@ export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Alert.alert(
       'Logout',
       'Are you sure you want to logout?',
@@ -25,8 +25,16 @@ export default function ProfileScreen() {
           text: 'Logout',
           style: 'destructive',
           onPress: async () => {
-            await logout();
-            router.replace('/');
+            try {
+              await logout();
+              // Force navigation to login screen
+              router.replace('/');
+            } catch (error) {
+              console.error('Logout error:', error);
+              // Even if logout API fails, clear local state and navigate
+              await logout();
+              router.replace('/');
+            }
           },
         },
       ]
