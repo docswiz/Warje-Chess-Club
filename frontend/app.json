@@ -13,7 +13,8 @@
       "bundleIdentifier": "com.chessclub.app",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Select photos for chess positions",
-        "NSCameraUsageDescription": "Take photos of chess boards"
+        "NSCameraUsageDescription": "Take photos of chess boards",
+        "NSUserNotificationsUsageDescription": "Get notified about daily puzzles"
       }
     },
     "android": {
