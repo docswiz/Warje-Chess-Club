@@ -176,7 +176,7 @@ async def create_session(request: Request, response: Response):
         )
         user_id = user_doc["user_id"]
     else:
-        # Create new user with 1 month trial
+        # Create new user - NO FREE TRIAL, inactive by default
         user_id = f"user_{uuid.uuid4().hex[:12]}"
         new_user = User(
             user_id=user_id,
@@ -184,8 +184,8 @@ async def create_session(request: Request, response: Response):
             name=session_data.name,
             picture=session_data.picture,
             role="member",
-            subscription_status="active",
-            subscription_expires_at=datetime.now(timezone.utc) + timedelta(days=30),  # 1 month
+            subscription_status="inactive",  # Inactive until owner activates
+            subscription_expires_at=None,  # No expiry until activated
             created_at=datetime.now(timezone.utc)
         )
         await db.users.insert_one(new_user.dict())
