@@ -45,7 +45,7 @@ class ChessClubTester:
         print("🧹 Cleaning up test environment...")
         
         # Clean test data from database
-        if self.db:
+        if self.db is not None:
             try:
                 # Remove test users and sessions
                 await self.db.users.delete_many({"email": {"$regex": "test\\.user\\.|test@"}})
