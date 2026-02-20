@@ -246,7 +246,14 @@ async def logout(request: Request, response: Response, session_token: Optional[s
 @api_router.get("/posts", response_model=List[Post])
 async def get_posts(request: Request, session_token: Optional[str] = Cookie(None)):
     """Get all posts (for members and owners)"""
-    await get_current_user(request, session_token)  # Verify authentication
+    user = await get_current_user(request, session_token)  # Verify authentication
+    
+    # Check if member has active subscription
+    if user.role == "member" and user.subscription_status != "active":
+        raise HTTPException(
+            status_code=403, 
+            detail="Your subscription is inactive. Please contact the club owner to activate your membership."
+        )
     
     posts = await db.posts.find().sort("created_at", -1).to_list(100)
     return [Post(**post) for post in posts]
