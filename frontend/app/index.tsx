@@ -47,7 +47,7 @@ export default function Index() {
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <Ionicons name="chess-knight" size={120} color="#8B4513" />
+          <Ionicons name="shield" size={120} color="#8B4513" />
         </View>
         
         <Text style={styles.title}>Warje Chess Club</Text>
