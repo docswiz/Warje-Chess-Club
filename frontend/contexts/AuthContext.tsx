@@ -72,11 +72,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const userData = await response.json();
       
-      // Extract session token from response (it should be in the response body)
-      const sessionToken = sessionId; // The backend uses the session_id from Emergent
-      await AsyncStorage.setItem('session_token', sessionToken);
+      // The backend creates a session_token and returns user data
+      // We need to get the session_token from the Emergent API response
+      // For mobile, we'll need to extract it differently
+      // For now, we'll make a request to get the session token
+      const sessionCheckResponse = await fetch(`${BACKEND_URL}/api/auth/me`, {
+        headers: {
+          'X-Session-ID': sessionId,
+        },
+      });
       
-      setUser(userData);
+      if (sessionCheckResponse.ok) {
+        // Store the session_id as our token for now
+        // The backend will accept it via the Authorization header
+        await AsyncStorage.setItem('session_token', sessionId);
+        setUser(userData);
+      }
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
