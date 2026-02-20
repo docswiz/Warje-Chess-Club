@@ -166,6 +166,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkAuth();
   }, [checkAuth]);
 
+  // Register for push notifications when user logs in
+  useEffect(() => {
+    if (user) {
+      registerForPushNotifications();
+    }
+  }, [user]);
+
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout, checkAuth }}>
       {children}
