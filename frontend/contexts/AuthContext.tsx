@@ -39,6 +39,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const registerForPushNotifications = async () => {
+    try {
+      // Check if physical device (push notifications don't work on simulator)
+      if (!Device.isDevice) {
+        console.log('Push notifications only work on physical devices');
+        return;
+      }
+
+      // Request permissions
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      
+      if (finalStatus !== 'granted') {
+        console.log('Push notification permission denied');
+        return;
+      }
+
+      // Get push token
+      const token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log('Push token:', token);
+
+      // Save to backend
+      const sessionToken = await AsyncStorage.getItem('session_token');
+      if (sessionToken) {
+        await fetch(`${BACKEND_URL}/api/auth/save-push-token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionToken}`,
+          },
+          body: JSON.stringify({ push_token: token }),
+        });
+        console.log('Push token saved to backend');
+      }
+    } catch (error) {
+      console.error('Failed to register for push notifications:', error);
+    }
+  };
+
   const checkAuth = useCallback(async () => {
     try {
       const token = await AsyncStorage.getItem('session_token');
