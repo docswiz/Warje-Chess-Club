@@ -88,6 +88,39 @@ class SessionData(BaseModel):
     picture: str
     session_token: str
 
+class PushTokenRequest(BaseModel):
+    push_token: str
+
+# ============================================================================
+# NOTIFICATION HELPER
+# ============================================================================
+
+async def send_push_notification(tokens: List[str], title: str, body: str, data: dict = None):
+    """Send push notifications to multiple devices"""
+    successful = 0
+    failed = 0
+    
+    for token in tokens:
+        try:
+            PushClient().publish(
+                PushMessage(
+                    to=token,
+                    title=title,
+                    body=body,
+                    sound="default",
+                    data=data or {}
+                )
+            )
+            successful += 1
+        except PushServerError as e:
+            logger.error(f"Failed to send notification to {token}: {e}")
+            failed += 1
+        except Exception as e:
+            logger.error(f"Unexpected error sending notification: {e}")
+            failed += 1
+    
+    return {"successful": successful, "failed": failed}
+
 # ============================================================================
 # AUTHENTICATION HELPER
 # ============================================================================
