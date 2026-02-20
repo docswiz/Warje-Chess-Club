@@ -419,6 +419,73 @@ async def get_club_info():
 # ADMIN ROUTES
 # ============================================================================
 
+@api_router.get("/admin/members")
+async def get_all_members(
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Get all members (owner only)"""
+    user = await get_current_user(request, session_token)
+    
+    if user.role != "owner":
+        raise HTTPException(status_code=403, detail="Only owners can view members")
+    
+    members = await db.users.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return members
+
+@api_router.post("/admin/members/{user_id}/subscription")
+async def update_member_subscription(
+    user_id: str,
+    action: str,
+    months: int = 1,
+    request: Request = None,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Update member subscription (owner only)
+    action: 'activate', 'extend', 'deactivate'
+    months: number of months to extend (default 1)
+    """
+    user = await get_current_user(request, session_token)
+    
+    if user.role != "owner":
+        raise HTTPException(status_code=403, detail="Only owners can manage subscriptions")
+    
+    member = await db.users.find_one({"user_id": user_id}, {"_id": 0})
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    
+    update_data = {}
+    
+    if action == "activate":
+        update_data["subscription_status"] = "active"
+        update_data["subscription_expires_at"] = datetime.now(timezone.utc) + timedelta(days=30 * months)
+    elif action == "extend":
+        current_expiry = member.get("subscription_expires_at")
+        if isinstance(current_expiry, str):
+            current_expiry = datetime.fromisoformat(current_expiry)
+        if current_expiry.tzinfo is None:
+            current_expiry = current_expiry.replace(tzinfo=timezone.utc)
+        
+        # If expired, extend from now. Otherwise extend from expiry date
+        if current_expiry < datetime.now(timezone.utc):
+            new_expiry = datetime.now(timezone.utc) + timedelta(days=30 * months)
+        else:
+            new_expiry = current_expiry + timedelta(days=30 * months)
+        
+        update_data["subscription_expires_at"] = new_expiry
+        update_data["subscription_status"] = "active"
+    elif action == "deactivate":
+        update_data["subscription_status"] = "inactive"
+    else:
+        raise HTTPException(status_code=400, detail="Invalid action")
+    
+    await db.users.update_one(
+        {"user_id": user_id},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Subscription updated successfully", "action": action}
+
 @api_router.post("/admin/make-owner/{user_email}")
 async def make_owner(
     user_email: str,
