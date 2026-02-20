@@ -210,9 +210,13 @@ async def create_session(request: Request, response: Response):
         path="/"
     )
     
-    # Return user data
+    # Return user data with session_token
     user_doc = await db.users.find_one({"user_id": user_id}, {"_id": 0})
-    return User(**user_doc)
+    user_data = User(**user_doc)
+    return {
+        **user_data.dict(),
+        "session_token": session_data.session_token
+    }
 
 @api_router.get("/auth/me")
 async def get_me(request: Request, session_token: Optional[str] = Cookie(None)):
