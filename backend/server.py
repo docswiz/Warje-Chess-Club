@@ -404,6 +404,17 @@ async def get_subscription(request: Request, session_token: Optional[str] = Cook
         "is_active": user.subscription_status == "active"
     }
 
+@api_router.get("/club-info")
+async def get_club_info():
+    """Get Warje Chess Club information - open status and timings"""
+    # In a real app, this would be configurable from admin panel
+    # For now, returning static data
+    return {
+        "name": "Warje Chess Club",
+        "is_open": True,
+        "timings": "Mon-Sat: 6:00 PM - 9:00 PM, Sun: 10:00 AM - 1:00 PM"
+    }
+
 # ============================================================================
 # ADMIN ROUTES
 # ============================================================================
