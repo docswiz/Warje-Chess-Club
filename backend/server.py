@@ -273,6 +273,22 @@ async def logout(request: Request, response: Response, session_token: Optional[s
     response.delete_cookie(key="session_token", path="/")
     return {"message": "Logged out successfully"}
 
+@api_router.post("/auth/save-push-token")
+async def save_push_token(
+    token_data: PushTokenRequest,
+    request: Request,
+    session_token: Optional[str] = Cookie(None)
+):
+    """Save user's push notification token"""
+    user = await get_current_user(request, session_token)
+    
+    await db.users.update_one(
+        {"user_id": user.user_id},
+        {"$set": {"push_token": token_data.push_token}}
+    )
+    
+    return {"message": "Push token saved successfully"}
+
 # ============================================================================
 # POST ROUTES
 # ============================================================================
