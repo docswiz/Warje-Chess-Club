@@ -1,0 +1,18 @@
+# Export Summary
+# Generated: Fri Feb 20 18:58:48 UTC 2026
+
+Total Members: 1
+Active Members: 1
+Total Posts: 4
+Total Puzzles: 4
+Puzzle Attempts: 12
+
+Files Exported:
+- database_backup/         (MongoDB dump - for import)
+- users.json              (11 lines)
+- posts.json              (52 lines)
+- puzzle_attempts.json    (120 lines)
+- sessions.json           (42 lines)
+- env_template.txt        (Environment setup)
+- MIGRATION_GUIDE.md      (Complete hosting guide)
+- export_summary.txt      (This file)

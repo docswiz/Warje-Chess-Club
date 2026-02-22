@@ -1,0 +1,29 @@
+# ================================
+# BACKEND ENVIRONMENT VARIABLES
+# ================================
+# Save this as /app/backend/.env
+
+# MongoDB Atlas (Sign up at https://www.mongodb.com/cloud/atlas/register)
+MONGO_URL=mongodb+srv://USERNAME:PASSWORD@cluster.mongodb.net/chess_club?retryWrites=true&w=majority
+DB_NAME=chess_club
+
+# ================================
+# FRONTEND ENVIRONMENT VARIABLES  
+# ================================
+# Save this as /app/frontend/.env
+
+# Your backend URL (after deployment)
+EXPO_PUBLIC_BACKEND_URL=https://your-backend-url.com
+
+# ================================
+# DEPLOYMENT CHECKLIST
+# ================================
+
+1. [ ] Sign up for MongoDB Atlas (free tier)
+2. [ ] Create cluster and database
+3. [ ] Import data using: mongorestore --uri="YOUR_MONGO_URL" database_backup/test_database
+4. [ ] Deploy backend to Vercel/Render/Railway
+5. [ ] Update EXPO_PUBLIC_BACKEND_URL in frontend/.env
+6. [ ] Build new APK with updated backend URL
+7. [ ] Test everything!
+

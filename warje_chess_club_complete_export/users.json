@@ -1,0 +1,11 @@
+{
+  _id: ObjectId('69986b588913d9883d3baec6'),
+  user_id: 'user_36f8adb7c848',
+  email: 'inamdar.pomatic@gmail.com',
+  name: 'P I',
+  picture: 'https://lh3.googleusercontent.com/a/ACg8ocJT6e6COdVXbqiCUJPaFjSV4ElvgbjG4a75MzEQZRw-vsgO7O4=s96-c',
+  role: 'owner',
+  subscription_status: 'active',
+  subscription_expires_at: ISODate('2027-02-20T14:10:32.085Z'),
+  created_at: ISODate('2026-02-20T14:10:32.085Z')
+}

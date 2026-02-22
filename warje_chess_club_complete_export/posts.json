@@ -1,0 +1,52 @@
+{
+  _id: ObjectId('69986a248913d9883d3baebb'),
+  post_id: 'post_5efab5ec94d3',
+  title: 'Test Chess Puzzle',
+  content: "White to move and mate in 2. What's the winning move?",
+  image: null,
+  is_puzzle: true,
+  puzzle_answer: 'Qh5',
+  success_message: 'Excellent! Qh5 threatens mate on multiple squares!',
+  failure_message: 'Not quite right. Look for a queen move that creates multiple threats.',
+  created_by: 'test-user-72393e25',
+  created_at: ISODate('2026-02-20T14:05:24.854Z')
+}
+{
+  _id: ObjectId('69986a258913d9883d3baebd'),
+  post_id: 'post_ca846b39045d',
+  title: 'Multi-Attempt Test Puzzle',
+  content: 'Another chess puzzle for testing attempts',
+  image: null,
+  is_puzzle: true,
+  puzzle_answer: 'Nf7',
+  success_message: 'Great job!',
+  failure_message: 'Better luck next time!',
+  created_by: 'test-user-72393e25',
+  created_at: ISODate('2026-02-20T14:05:25.279Z')
+}
+{
+  _id: ObjectId('69986a2e8913d9883d3baec1'),
+  post_id: 'post_2a39cc9540ce',
+  title: 'Test Chess Puzzle',
+  content: "White to move and mate in 2. What's the winning move?",
+  image: null,
+  is_puzzle: true,
+  puzzle_answer: 'Qh5',
+  success_message: 'Excellent! Qh5 threatens mate on multiple squares!',
+  failure_message: 'Not quite right. Look for a queen move that creates multiple threats.',
+  created_by: 'test-user-e3040ee4',
+  created_at: ISODate('2026-02-20T14:05:34.128Z')
+}
+{
+  _id: ObjectId('69986a2e8913d9883d3baec3'),
+  post_id: 'post_e0de975a62a8',
+  title: 'Multi-Attempt Test Puzzle',
+  content: 'Another chess puzzle for testing attempts',
+  image: null,
+  is_puzzle: true,
+  puzzle_answer: 'Nf7',
+  success_message: 'Great job!',
+  failure_message: 'Better luck next time!',
+  created_by: 'test-user-e3040ee4',
+  created_at: ISODate('2026-02-20T14:05:34.717Z')
+}

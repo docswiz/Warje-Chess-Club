@@ -1,0 +1,42 @@
+{
+  _id: ObjectId('69986b588913d9883d3baec7'),
+  user_id: 'user_36f8adb7c848',
+  session_token: '7m5ZbnO9zELJkU_aJ9HRA58oWjt5BzruhJ1eT312zUo',
+  expires_at: ISODate('2026-02-27T14:10:32.085Z'),
+  created_at: ISODate('2026-02-20T14:10:32.085Z')
+}
+{
+  _id: ObjectId('69986dd98913d9883d3baece'),
+  user_id: 'user_36f8adb7c848',
+  session_token: 'MZvvUAPXAaASsbU9v9EomljkECxt-YIcrPCJuf2vNPE',
+  expires_at: ISODate('2026-02-27T14:21:13.717Z'),
+  created_at: ISODate('2026-02-20T14:21:13.717Z')
+}
+{
+  _id: ObjectId('69987a5d76b0acfe5be7a2ca'),
+  user_id: 'user_36f8adb7c848',
+  session_token: 'l2HHTOMHTwcv5QshyvrfqOdkYJbEDsiMwJBTiUTf2Qk',
+  expires_at: ISODate('2026-02-27T15:14:37.375Z'),
+  created_at: ISODate('2026-02-20T15:14:37.375Z')
+}
+{
+  _id: ObjectId('69989dfe268828814ac5f82f'),
+  user_id: 'user_36f8adb7c848',
+  session_token: 'NpmeVE2NGhBNrU24FCYJLXNm-I2Ev3whbe8qf2F9rMY',
+  expires_at: ISODate('2026-02-27T17:46:38.333Z'),
+  created_at: ISODate('2026-02-20T17:46:38.333Z')
+}
+{
+  _id: ObjectId('69989fb9268828814ac5f830'),
+  user_id: 'user_36f8adb7c848',
+  session_token: 'IoxWjekY_cup5Bfm0rRSvY5S6e9-3gR9HxXie0ao2qE',
+  expires_at: ISODate('2026-02-27T17:54:01.684Z'),
+  created_at: ISODate('2026-02-20T17:54:01.684Z')
+}
+{
+  _id: ObjectId('6998a26d7cc201db92dc33c0'),
+  user_id: 'user_36f8adb7c848',
+  session_token: 'm2dk7cdGyScU4V3I2kaYuFmnVpWGKalzDFQtgYHNbJc',
+  expires_at: ISODate('2026-02-27T18:05:33.643Z'),
+  created_at: ISODate('2026-02-20T18:05:33.643Z')
+}
