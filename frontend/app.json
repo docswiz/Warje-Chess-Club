@@ -22,11 +22,10 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#8B4513"
       },
-      "package": "com.chessclub.app",
-      "permissions": [
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "CAMERA"
+      "package": "com.chessclub.app",        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ],
       "edgeToEdgeEnabled": true
     },
@@ -52,6 +51,14 @@
         }
       ]
     ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "dd32eae5-6b94-473a-8524-ceec42d909eb"
+      }
+   ],
     "experiments": {
       "typedRoutes": true
     }

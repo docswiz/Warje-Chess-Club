@@ -1,0 +1,32 @@
+# Ignore node_modules (EAS rebuilds them in the cloud anyway)
+
+node_modules/
+
+# Ignore build artifacts
+
+dist/
+build/
+\*.log
+
+# Ignore local environment files
+
+.env
+.env.local
+.env.development
+.env.production
+
+# Ignore IDE/editor settings
+
+.vscode/
+.idea/
+
+# Ignore OS-specific files
+
+.DS_Store
+Thumbs.db
+
+# Ignore test files and docs
+
+**tests**/
+docs/
+\*.md

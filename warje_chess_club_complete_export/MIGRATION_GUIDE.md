@@ -32,7 +32,7 @@
    - Add User
 
 5. Allow Network Access:
-   - Security → Network Access  
+   - Security → Network Access
    - Add IP Address
    - Select "Allow Access from Anywhere" (0.0.0.0/0)
    - Confirm
@@ -44,6 +44,7 @@
    ```
    mongodb+srv://chessclub:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
    ```
+
    - Replace `<password>` with your actual password
    - Add database name: `chess_club` before the `?`
    ```
@@ -118,17 +119,20 @@ You should see your member count!
 ### Step 4: Update Frontend & Build APK
 
 1. **Update frontend/.env:**
+
    ```
    EXPO_PUBLIC_BACKEND_URL=https://your-backend-url.vercel.app
    ```
 
 2. **Build new APK:**
+
    ```bash
    cd frontend
    eas build --platform android --profile preview
    ```
 
 3. **Or use Expo build:**
+
    ```bash
    expo build:android -t apk
    ```
@@ -152,23 +156,25 @@ You should see your member count!
 
 ## 💰 Cost Breakdown (Running Independently)
 
-| Service | Cost | Notes |
-|---------|------|-------|
-| MongoDB Atlas | FREE | 512MB (enough for 1000+ members) |
-| Vercel/Render | FREE | Generous free tier |
-| Expo Notifications | FREE | 1000/day free |
-| **Total** | **₹0/month** | Can upgrade later if needed |
+| Service            | Cost         | Notes                            |
+| ------------------ | ------------ | -------------------------------- |
+| MongoDB Atlas      | FREE         | 512MB (enough for 1000+ members) |
+| Vercel/Render      | FREE         | Generous free tier               |
+| Expo Notifications | FREE         | 1000/day free                    |
+| **Total**          | **₹0/month** | Can upgrade later if needed      |
 
 ---
 
 ## 🔄 Monthly Maintenance
 
 **As Club Owner:**
+
 1. Manage subscriptions via Members tab
 2. Post daily puzzles
 3. Monitor member activity
 
 **Technical (Optional):**
+
 1. Backup database monthly:
    ```bash
    mongodump --uri="YOUR_ATLAS_URL" --out=backup_$(date +%Y%m%d)
@@ -179,16 +185,19 @@ You should see your member count!
 ## 🆘 Troubleshooting
 
 **Members can't login:**
+
 - Check backend URL in frontend/.env
 - Verify backend is running (visit URL in browser)
 - Check MongoDB Atlas IP whitelist
 
 **Database import failed:**
+
 - Check connection string format
 - Verify password has no special characters (or encode them)
 - Try importing one collection at a time
 
 **Backend won't deploy:**
+
 - Check all environment variables are set
 - Verify requirements.txt is present
 - Check logs on hosting platform
@@ -221,7 +230,7 @@ db.users.countDocuments({subscription_status: "active"})
 ## ✅ Migration Checklist
 
 - [ ] MongoDB Atlas account created
-- [ ] Cluster created and configured  
+- [ ] Cluster created and configured
 - [ ] Database user added
 - [ ] Network access allowed
 - [ ] Data imported successfully
@@ -239,6 +248,7 @@ db.users.countDocuments({subscription_status: "active"})
 ## 🎉 You're Independent!
 
 Your chess club app now runs completely independently:
+
 - ✅ No Emergent subscription needed
 - ✅ Data is yours on MongoDB Atlas
 - ✅ Can modify code anytime
@@ -260,4 +270,3 @@ Your chess club app now runs completely independently:
 ---
 
 **Questions? Check logs on your hosting platform or MongoDB Atlas dashboard.**
-
