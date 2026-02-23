@@ -193,7 +193,7 @@ You should see your member count!
    ```
 
 3. **Or use Expo build:**
-   ```bash
+   ```bash 
    expo build:android -t apk
    ```
 
