@@ -589,6 +589,11 @@ async def make_owner(
 # Include the router in the main app
 app.include_router(api_router)
 
+@app.get("/")
+async def root():
+    """Root endpoint for health checks"""
+    return {"message": "Warje Chess Club API", "status": "running"}
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
