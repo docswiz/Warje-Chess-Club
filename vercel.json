@@ -1,0 +1,8 @@
+{
+  "buildCommand": "cd backend && uv pip install -r requirements.txt",
+  "outputDirectory": "backend",
+  "framework": "other",
+  "env": {
+    "PYTHONUNBUFFERED": "1"
+  }
+}
