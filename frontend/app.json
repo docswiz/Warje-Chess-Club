@@ -17,20 +17,20 @@
         "NSUserNotificationsUsageDescription": "Get notified about daily puzzles"
       }
     },
-"android": {
-  "adaptiveIcon": {
-    "foregroundImage": "./assets/images/adaptive-icon.png",
-    "backgroundColor": "#8B4513"
-  },
-  "package": "com.chessclub.app",
-  "permissions": [
-    "READ_EXTERNAL_STORAGE",
-    "WRITE_EXTERNAL_STORAGE",
-    "CAMERA",
-    "RECORD_AUDIO"
-  ],
-  "edgeToEdgeEnabled": true
-}
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#8B4513"
+      },
+      "package": "com.chessclub.app",
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA",
+        "RECORD_AUDIO"
+      ],
+      "edgeToEdgeEnabled": true
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -60,9 +60,6 @@
       "eas": {
         "projectId": "dd32eae5-6b94-473a-8524-ceec42d909eb"
       }
-   ],
-    "experiments": {
-      "typedRoutes": true
     }
   }
 }
